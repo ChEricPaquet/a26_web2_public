@@ -65,7 +65,7 @@ function connecter()
     // Vérification des informations d'identification
     $requeteUtilisateurs = ModeleUtilisateurs::obtenirUtilisateur($_POST['nomUtilisateur']);
     $utilisateur = $requeteUtilisateurs->fetch();
-    if (!$utilisateur || $utilisateur['mot_de_passe'] !== $_POST['motDePasse']) {
+    if (!$utilisateur || !password_verify($_POST['motDePasse'], $utilisateur['mot_de_passe'])) {
         $_SESSION['erreurs'] = ['Nom d\'utilisateur ou mot de passe incorrect.'];
         header('Location: index.php?action=afficherPageConnexion');
         exit;
@@ -89,8 +89,10 @@ function inscrire()
     }
 
     try {
+        // Hachage du mot de passe
+        $motDePasseHache = password_hash($_POST['motDePasse'], PASSWORD_DEFAULT);
         // Ajout de l'utilisateur dans la base de données
-        ModeleUtilisateurs::ajouterUtilisateur($_POST['nomUtilisateur'], $_POST['motDePasse']);
+        ModeleUtilisateurs::ajouterUtilisateur($_POST['nomUtilisateur'], $motDePasseHache);
         // Après une inscription réussie, connecter automatiquement l'utilisateur
         connecter();
     } catch (PDOException $e) {

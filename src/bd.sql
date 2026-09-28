@@ -9,7 +9,7 @@ SET default_storage_engine=InnoDB;
 CREATE TABLE `utilisateurs` (
     `id` int NOT NULL AUTO_INCREMENT,
     `nom` varchar(45) NOT NULL,
-    `mot_de_passe` varchar(45) NOT NULL,
+    `mot_de_passe` varchar(255) NOT NULL,
     `email` varchar(255) DEFAULT NULL,
     `image` varchar(2048) DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -17,7 +17,7 @@ CREATE TABLE `utilisateurs` (
 );
 
 INSERT INTO `utilisateurs` (`id`, `nom`, `mot_de_passe`) VALUES
-    (1, 'admin', '123456');
+    (1, 'admin', '$2y$12$uGwARXPnomr0u/OtCTBNzeKlhpURriaiDBQJZm.rY0TqN0Hk9x/VO'); -- Mot de passe haché pour '123456'
 
 INSERT INTO `utilisateurs` (`id`, `nom`, `mot_de_passe`, `email`, `image`) VALUES
-    (2, 'user1', 'password1', 'user1@example.com', 'https://placehold.co/42');
+    (2, 'user1', '$2y$12$aCX4MDnlrfoHgS5BDmQ8Me/mfO37WpHdbMtgj1s8Ul5EtceePi/mi', 'user1@example.com', 'https://placehold.co/42'); -- Mot de passe haché pour 'password1'

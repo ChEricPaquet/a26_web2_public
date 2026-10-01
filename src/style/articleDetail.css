@@ -1,0 +1,16 @@
+#carouselArticle {
+    background-color: #f8f9fa;
+    max-height: 500px;
+}
+
+#carouselArticle .carousel-item img {
+    height: 450px;
+    object-fit: cover;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    #carouselArticle .carousel-item img {
+        height: 280px;
+    }
+}

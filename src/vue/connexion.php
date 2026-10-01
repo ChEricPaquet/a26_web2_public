@@ -2,7 +2,7 @@
 
 <?php ob_start(); ?>
 
-<h1 class="text-center">Connexion</h1>
+<h1 class="fw-bold text-center">Connexion</h1>
 
 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
     <?php

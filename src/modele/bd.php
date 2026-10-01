@@ -4,7 +4,7 @@ class BD
     /** Hôte sur lequel le serveur de base de données se situe. */
     private const HOST = 'db';
     /** Nom de la base de données. */
-    private const DB_NAME = 'exercice_bd';
+    private const DB_NAME = 'exercice_bd_supplementaire';
     /**
      * Le jeu de caractères.
      * https://www.php.net/manual/fr/mysqlinfo.concepts.charset.php
@@ -25,11 +25,16 @@ class BD
         PDO::ATTR_EMULATE_PREPARES => false, // Protection contre l'injection de 2ème niveau
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC // Fetch retourne un tableau associatif
     ];
+    /** Variable qui conservera la connexion */
+    private static ?PDO $connexion = null;
 
     /** @return PDO Une connexion à la base de données */
     public static function ObtenirConnexion()
     {
         // https://www.php.net/manual/en/pdo.construct.php
-        return new PDO(BD::DSN, BD::USER, BD::PASSWORD, BD::OPTIONS);
+        if (self::$connexion === null) {
+            self::$connexion = new PDO(BD::DSN, BD::USER, BD::PASSWORD, BD::OPTIONS);
+        }
+        return self::$connexion;
     }
 }

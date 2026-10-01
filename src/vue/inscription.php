@@ -1,7 +1,7 @@
 <?php $titreOnglet = 'Inscription'; ?>
 <?php ob_start(); ?>
 
-<h1 class="text-center">Inscription</h1>
+<h1 class="fw-bold text-center">Inscription</h1>
 
 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
     <?php

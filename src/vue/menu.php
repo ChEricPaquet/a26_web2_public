@@ -20,6 +20,24 @@
                         Accueil
                     </a>
                 </li>
+                <?php if (estConnecte()) { ?>
+                    <!-- Bouton vers la page des articles -->
+                    <li class="nav-item">
+                        <a
+                            class="nav-link <?php NavClass("afficherPageArticles"); ?>"
+                            href="index.php?action=afficherPageArticles">
+                            Articles
+                        </a>
+                    </li>
+                    <!-- Bouton vers la page du formulaire de création d'article -->
+                    <li class="nav-item">
+                        <a
+                            class="nav-link <?php NavClass("afficherPageNouvelArticle"); ?>"
+                            href="index.php?action=afficherPageNouvelArticle">
+                            Nouvel Article
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
             <!-- Boutons de navigation à droite -->
             <ul class="navbar-nav">

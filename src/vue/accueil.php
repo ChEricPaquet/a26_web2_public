@@ -12,7 +12,7 @@ $titreOnglet = 'Accueil';
 ob_start();
 ?>
 
-<h1 class="text-center">Accueil</h1>
+<h1 class="fw-bold text-center">Accueil</h1>
 
 <?php
 // Récupération de tout le contenu généré depuis le début de la mise en tampon.

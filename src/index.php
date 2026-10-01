@@ -1,7 +1,11 @@
 <?php
 session_start();
 
+require_once 'utils/validationUtils.php';
 require_once 'controleur/controleur.php';
+require_once 'controleur/controleurArticles.php';
+require_once 'controleur/controleurAuth.php';
+require_once 'controleur/controleurProfil.php';
 
 try {
     if (!isset($_GET['action'])) {
@@ -22,6 +26,12 @@ try {
         case 'afficherPageProfil':
             afficherPageProfil();
             break;
+        case 'afficherPageArticles':
+            afficherPageArticles();
+            break;
+        case 'afficherPageNouvelArticle':
+            afficherPageNouvelArticle();
+            break;
         case 'connecter':
             connecter();
             break;
@@ -33,6 +43,9 @@ try {
             break;
         case 'modifierProfil':
             modifierProfil();
+            break;
+        case 'ajouterArticle':
+            ajouterArticle();
             break;
         default:
             throw new Exception('404 : Action non supportée');

@@ -1,10 +1,15 @@
+<?php 
+    assert(isset($utilisateur), 'L\'utilisateur doit être connecté pour accéder à cette page.');
+    assert(is_array($utilisateur), 'Les données de l\'utilisateur doivent être un tableau.');
+?>
+
 <?php $titreOnglet = 'Profil'; ?>
 <?php ob_start(); ?>
 
 <?php
-$nomUtilisateur = htmlspecialchars($_SESSION['utilisateur']['nomUtilisateur']);
-$email = htmlspecialchars($_SESSION['utilisateur']['email'] ?? '');
-$image = htmlspecialchars($_SESSION['utilisateur']['image'] ?? '');
+$nomUtilisateur = htmlspecialchars($utilisateur['nom'] ?? '');
+$email = htmlspecialchars($utilisateur['email'] ?? '');
+$image = htmlspecialchars($utilisateur['image'] ?? '');
 ?>
 
 <h1 class="text-center">Profil</h1>

@@ -21,3 +21,6 @@ INSERT INTO `utilisateurs` (`id`, `nom`, `mot_de_passe`) VALUES
 
 INSERT INTO `utilisateurs` (`id`, `nom`, `mot_de_passe`, `email`, `image`) VALUES
     (2, 'user1', 'password1', 'user1@example.com', 'https://placehold.co/42');
+
+ALTER TABLE utilisateurs
+MODIFY mot_de_passe VARCHAR(255) NOT NULL;

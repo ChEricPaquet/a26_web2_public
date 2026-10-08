@@ -1,4 +1,6 @@
 <?php
+require_once "modele/modeleUtilisateurs.php";
+
 function afficherPageAccueil()
 {
     require 'vue/accueil.php';
@@ -35,6 +37,10 @@ function afficherPageProfil()
         header('Location: index.php?action=afficherPageConnexion');
         exit;
     }
+
+    $requeteUtilisateurs = ModeleUtilisateurs::obtenirUtilisateur($_SESSION['utilisateur']['nomUtilisateur']);
+    $utilisateur = $requeteUtilisateurs->fetch();
+
     require 'vue/profil.php';
 }
 
@@ -60,9 +66,13 @@ function connecter()
         exit;
     }
 
-    if (
-        $_POST['nomUtilisateur'] !== 'admin' ||
-        $_POST['motDePasse'] !== '123456'
+    $requeteUtilisateurs = ModeleUtilisateurs::obtenirUtilisateur($_POST['nomUtilisateur']);
+    $utilisateur = $requeteUtilisateurs->fetch();
+    
+        var_dump($utilisateur);
+    exit;
+    if (!$utilisateur || 
+    !password_verify($_POST['motDePasse'], $utilisateur['mot_de_passe'])
     ) {
         $_SESSION['erreurs'] = ['Nom d\'utilisateur ou mot de passe incorrect.'];
         header('Location: index.php?action=afficherPageConnexion');
@@ -90,9 +100,15 @@ function inscrire()
     }
 
     // Ajout de l'utilisateur dans la base de données
-
-    // Après une inscription réussie, connecter automatiquement l'utilisateur
-    connecter();
+    try{
+        $motDePasseHache = password_hash($_POST['motDePasse'], PASSWORD_DEFAULT);
+        ModeleUtilisateurs::ajouterUtilisateur($_POST['nomUtilisateur'], $motDePasseHache);
+        connecter();
+    } catch (PDOException $e) {
+        $_SESSION['erreurs'] = ['Le nom d\'utilisateur est déjà pris.'];
+        header('Location: index.php?action=afficherPageInscription');
+        exit;
+    }
 
     // Rediriger vers la page du profil après une inscription réussie
     header('Location: index.php?action=afficherPageProfil');
@@ -160,11 +176,26 @@ function modifierProfil()
         exit;
     }
 
-    // Mettre à jour les informations de l'utilisateur dans la session
-    $_SESSION['utilisateur']['nomUtilisateur'] = $_POST['nomUtilisateur'];
-    $_SESSION['utilisateur']['email'] = $_POST['email'] ?? ''; // Si email n'est pas fourni, le définir à une chaîne vide
-    $_SESSION['utilisateur']['image'] = $_POST['image'] ?? ''; // Si image n'est pas fourni, le définir à une chaîne vide
+    try {
+        // Mettre à jour les informations de l'utilisateur dans la base de données
+        ModeleUtilisateurs::mettreAJourUtilisateur(
+            $_SESSION['utilisateur']['nomUtilisateur'],
+            $_POST['nomUtilisateur'],
+            empty($_POST['email']) ? null : $_POST['email'],
+            empty($_POST['image']) ? null : $_POST['image'] 
+        );
 
-    // Rediriger vers la page du profil après la modification
-    header('Location: index.php?action=afficherPageProfil');
+        $_SESSION['utilisateur']['nom'] = $_POST['nomUtilisateur'];
+        $_SESSION['utilisateur']['email'] = $_POST['email'] ?? '';
+        $_SESSION['utilisateur']['image'] = $_POST['image'] ?? '';
+
+        // Rediriger vers la page du profil après la modification
+        header('Location: index.php?action=afficherPageProfil');
+    } catch (PDOException $e) {
+        // Gérer les erreurs ici
+        // Par exemple, si le nouveau nom d'utilisateur est déjà pris
+        // ou toute autre erreur de base de données
+        $_SESSION['erreurs'] = ['Une erreur est survenue lors de la mise à jour du profil.'];
+        header('Location: index.php?action=afficherPageProfil');
+    }
 }
